@@ -80,18 +80,26 @@ def arms(f, A, B=None, key_it=True):
             for b in ("UpperArm", "Forearm", "Wrist"): key(f"FK-{b}.{nm}", f)
 def torso(f, lean=0, side=0, hpitch=0, hside=0, htwist=0):
     _, F, L = axes(); a, s = math.radians(lean), math.radians(side)
-    aim("FK-Spine", (F * math.sin(a) + L * math.sin(s) + UP * math.cos(a)).normalized()); key("FK-Spine", f)
-    aim("FK-Chest", (F * math.sin(a * 0.5) + L * math.sin(s * 0.5) + UP * math.cos(a * 0.5)).normalized()); key("FK-Chest", f)
+    def zero(n): pb[n].rotation_euler = (0, 0, 0); upd()      # giro ABSOLUTO: zera antes de apontar (senao o twist se acumula entre frames)
+    zero("FK-Spine"); aim("FK-Spine", (F * math.sin(a) + L * math.sin(s) + UP * math.cos(a)).normalized()); key("FK-Spine", f)
+    zero("FK-Chest"); aim("FK-Chest", (F * math.sin(a * 0.5) + L * math.sin(s * 0.5) + UP * math.cos(a * 0.5)).normalized()); key("FK-Chest", f)
     h, hs = math.radians(hpitch), math.radians(hside)
-    aim("FK-Head", (F * math.sin(h) + L * math.sin(hs) + UP * math.cos(h)).normalized(), htwist); key("FK-Head", f)
+    zero("FK-Head"); aim("FK-Head", (F * math.sin(h) + L * math.sin(hs) + UP * math.cos(h)).normalized(), htwist); key("FK-Head", f)
+    flush_eyes()
+_pending_eyes = []
 def look_at(f, pt, head_share=0.5, pitch=0):
-    """olhos (TGT-Eyes) no ponto do mundo; cabeca acompanha em head_share do giro horizontal"""
+    """devolve o giro da cabeca (graus) para olhar o ponto; o alvo dos olhos so e posicionado no fim de torso(),
+    depois da cabeca ter a pose final (TGT-Eyes e filho da cabeca: se a cabeca gira depois, o alvo anda junto)."""
     _, F, L = axes()
     eye = rig.matrix_world @ (pb["FK-Head"].head + Vector((0, 0, 0.12)))
     d = (pt - eye); dh = Vector((d.x, d.y, 0)).normalized()
     th = math.degrees(math.atan2(F.cross(dh).z, F.dot(dh)))
-    b = pb["TGT-Eyes"]; M = b.matrix.copy(); M.translation = rig.matrix_world.inverted() @ pt; b.matrix = M; upd(); b.keyframe_insert("location", frame=f)
+    _pending_eyes.append((f, pt.copy()))
     return max(-45, min(45, th * head_share))
+def flush_eyes():
+    while _pending_eyes:
+        f, pt = _pending_eyes.pop(0)
+        b = pb["TGT-Eyes"]; M = b.matrix.copy(); M.translation = rig.matrix_world.inverted() @ pt; b.matrix = M; upd(); b.keyframe_insert("location", frame=f)
 
 # --------------------------------------------------------------- pes em IK
 def ik_legs(on, f):

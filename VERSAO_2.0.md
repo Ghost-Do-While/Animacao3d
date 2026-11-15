@@ -8,15 +8,15 @@ Branch `Versao-2.0`. Parte da `main` (Cena 02 com personagens placeholder). Arqu
 | Miguel | Rigify placeholder | **Vincent** (BlenRig) | animado nos frames 1-530 (briga, sem bracos cruzados) |
 | Claudio | Rigify placeholder | **Rex** (CloudRig) | animado nos frames 1-720 (empurra o ar, ombros, bracos baixos no lugar de cruzar) |
 | Ancora do telejornal | formas simples | **Victoria** (CloudRig) | animada (frames 1-103); 103 PNG novos em `render/telejornal/` |
-| Marcos | Rigify placeholder | **Snow** (CloudRig) | frames 1-492: carro (maos no volante por IK, tamborilar, rosto, olhar), saida do carro com a mao na porta, caminhada com pes em IK, em pe na briga. **Falta o apartamento (493-720)** |
+| Marcos | Rigify placeholder | **Snow** (CloudRig) | frames 1-720: carro (maos no volante por IK, tamborilar, rosto), saida do carro com a mao na porta, caminhada com pes em IK, em pe na briga, apartamento (abre e FECHA a porta com a mao na macaneta, chave jogada na mesa, sofa, controle, TV, dormindo) |
 
 Os personagens antigos ficam escondidos (nao apagados). O `RIG_Marcos` antigo continua na cena so para carregar o movimento de raiz (carro, caminhada, sofa); o `ROOT_Snow` o segue.
 
 ## Falta fazer
-- Snow no apartamento (493-720): abrir e fechar a porta com a mao na macaneta, chave na mesa, sofa, controle, TV, dormir. `PRP_Chaves` e `PRP_ControleRemoto` ainda estao presos ao rig antigo (retargetar para `DEF-Wrist.L/R` do Snow).
+- Conferir a mao do Snow na porta do carro (frame 250): a camera de teste ficou escondida atras dos carros.
 - Dedos (apontar) e lip-sync do Vincent e do Rex; olhos do Vincent (vinculo quebrado no log).
 - Chunk loader (so carregar o que a camera ve), cameras 16:9 e 9:16.
-- Render final dos frames 243-720 (os 1-242 estao ~46% feitos).
+- Render final de TODOS os frames (os 1-242 estao ~46% feitos em `render/cena02_frames`, fora do Git; frames 243-720 ainda nao).
 
 ## Scripts (`cena02/v2_*.py`) - ordem de montagem a partir do `cena02.blend`
 Sempre rodar com `-S Scene` (cena principal); so os da Victoria usam `-S SCN_Telejornal`.
@@ -24,13 +24,14 @@ Sempre rodar com `-S Scene` (cena principal); so os da Victoria usam `-S SCN_Tel
 2. Rex: `v2_b1_rex_append` -> `v2_rex_anim`
 3. Limite de GPU: `v2_c1_render_limits` (Subsurf render <= 1), `v2_c2_snow_textures` (texturas 1024 px em `snow_tex/`)
 4. Victoria: `v2_d1_victoria_append` -> `v2_victoria_anim` (`-S SCN_Telejornal`)
-5. Snow: `v2_e1_snow_append` -> `v2_e2_fix_snow_scene` -> `v2_f1_snow_poselib` -> `v2_snow_car` -> `v2_snow_car_face` -> `v2_snow_exit` (usa `snow_lib.py`)
+5. Snow: `v2_e1_snow_append` -> `v2_e2_fix_snow_scene` -> `v2_f1_snow_poselib` -> `v2_snow_car` -> `v2_snow_car_face` -> `v2_snow_exit` -> `v2_snow_apto` -> `v2_snow_eyes` (usam `snow_lib.py`)
 6. Render: `render_telejornal.py` e `render_cena.py` (Blender de fundo, retomaveis); testes: `v2_render_frames.py`, `v2_render_temp_cam.py`
 
 Exemplo: `blender -b cena02_v2.blend -S Scene --python cena02/v2_snow_car.py`
 
 ## Notas tecnicas (Radeon integrada / Blender 5.2)
 - Frame preto ou queda do Blender = limite da GPU integrada: Subsurf de render <= 1, texturas reduzidas, **um frame por processo** (`-b`). Aviso "tempo limite do driver (TDR)" da AMD aparece em alguns frames; `render_cena.py` tem vigia de 15 min por frame e refaz os que falham.
+- Giro da cabeca (`twist`) em `snow_lib.torso()` e ABSOLUTO (zera antes de apontar); o alvo dos olhos (`TGT-Eyes`) e filho da cabeca e so e posicionado depois da pose final dela.
 - Os rigs CloudRig vem com bracos/coluna em IK; as animacoes ligam FK pelas propriedades (`PRP-UpperArm.L/R`, `Properties`). Controle de IK do pulso no Snow: `IK-Wrist.L/R`.
 - Drivers FK/IK do BlenRig (Vincent) tinham caminho incompativel com o Blender 5.x: corrigido em `v2_a1g/a1h`.
 - Render do telejornal: ~2,4 min/frame (1280x720). Cena principal: ~4 min/frame (1920x1080) nesta maquina.
