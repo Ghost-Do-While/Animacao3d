@@ -41,7 +41,8 @@ ROOT = [  # frame, (x, y, z), yaw  (yaw continuo: vira para a porta e depois des
 for f, loc, yaw in ROOT:
     rm.location = Vector(loc); rm.rotation_euler = (0, 0, yaw)
     rm.keyframe_insert("location", frame=f); rm.keyframe_insert("rotation_euler", frame=f)
-set_interp(rm, ("location", "rotation_euler"), {493}, 'CONSTANT')      # corte: aparece na porta do apartamento
+# chaves novas herdam a interpolacao da anterior (a de 260 e CONSTANT -> o Marcos andava em degraus): forca suave em todas
+set_interp(rm, ("location", "rotation_euler"), {f for f, _, _ in ROOT}, 'BEZIER')     # o corte para o apartamento e a chave de 260 em CONSTANT
 
 # ============================================================== 2) porta do apartamento: abre (493-497), segura, FECHA (500-505)
 drop_keys(piv, ("rotation_euler",), 1, 720)
@@ -126,9 +127,16 @@ walk(521, 524, FL, step=0.25, swing_arms=False)
 frame(524); hang("L", 524); hang("R", 524); torso(524, lean=10, hpitch=4, htwist=look_at(524, TV, 0.4))
 
 # ---- 524-536: senta (raiz desce); pes em IK a frente do sofa
+frame(524)
+P0 = {side: rig.matrix_world @ pb["IK-Foot.%s" % ("L" if side > 0 else "R")].head for side in (1, -1)}     # onde os pes estao ao sentar
 frame(527)
 r = root_world(); _, F, L = axes()
-for side in (1, -1): foot(side, 527, Vector((r.x, r.y, FL + 0.08)) + F * 0.42 + L * side * 0.14, F)
+P1 = {side: Vector((r.x, r.y, FL + 0.08)) + F * 0.42 + L * side * 0.14 for side in (1, -1)}
+for side in (1, -1): foot(side, 527, P1[side], F)
+for f, t in ((525, 0.4), (526, 0.75)):                       # pequeno passo com o pe erguido (sem arrastar no chao)
+    frame(f)
+    for side in (1, -1): foot(side, f, P0[side].lerp(P1[side], t), axes()[1], lift=0.07)
+frame(527)
 frame(531)
 for side in (1, -1): foot(side, 531, Vector((r.x, r.y, FL + 0.08)) + F * 0.42 + L * side * 0.14, F)
 SEAT_L, SEAT_R = (0.28, 0.20), (0.28, 0.20)

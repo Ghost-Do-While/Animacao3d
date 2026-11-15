@@ -1,0 +1,30 @@
+CHK OK arquivos texturas/imagens com arquivo faltando: nenhuma
+CHK OK gpu memoria total de imagens carregadas: 158 MB (Radeon integrada: 512 MB dedicados)
+CHK OK telejornal PNG da TV do apartamento: 103/103 em render/telejornal
+CHK OK privacidade caminhos com o nome do usuario no .blend: 0 (+0 referencias internas)
+CHK OK timeline fps=24, frames 1-720, 1920x1080@100%, motor BLENDER_EEVEE, amostras 64
+CHK OK cameras marcadores de camera: [(1, 'CAM_01'), (73, 'CAM_02'), (145, 'CAM_03'), (205, 'CAM_04'), (253, 'CAM_05'), (289, 'CAM_06'), (397, 'CAM_07'), (493, 'CAM_08'), (541, 'CAM_09'), (601, 'CAM_10')]
+CHK AVISO cameras enquadramento multi-formato 16:9 + 9:16 (Etapa 5) ainda NAO feito: cameras so em 1920x1080
+CHK OK RIG-Vincent acao 'RIG-VincentAction': 1612 chaves, frames 1-720
+CHK OK RIG-rex acao 'RIG-rexAction': 792 chaves, frames 1-720
+CHK OK RIG-Snow acao 'RIG-SnowAction': 56455 chaves, frames 1-720
+CHK OK RIG-Victoria acao 'RIG-VictoriaAction': frames 1-103 (telejornal, cena SCN_Telejornal)
+CHK OK CHAR_Miguel personagem antigo escondido no render
+CHK OK CHAR_Claudio personagem antigo escondido no render
+CHK OK CHAR_Marcos malhas do Marcos antigo visiveis no render: nenhuma
+CHK AVISO gpu Subsurf de render > 1 nos personagens novos: [('GEO-rex_polo_shirt', 2), ('GEO-rex_polo_shirt_collar', 2), ('GEO-victoria_dress', 2)]
+CHK OK objetos sem posicoes invalidas (NaN/infinito)
+CHK AVISO bracos RIG-Snow: maos cruzam a linha do corpo em 1 de 120 amostras [(505, -0.08, -0.22)]
+CHK OK bracos RIG-rex: maos cruzam a linha do corpo em 0 de 120 amostras []
+CHK OK bracos RIG-Vincent: maos cruzam a linha do corpo em 0 de 120 amostras []
+CHK AVISO pes caminhada plano 05 (frames 253-260): frames com deslize lento no chao: 2 [(258, 'L', 0.03), (258, 'R', 0.05)]; passo mais rapido 0.44 m/frame; altura do tornozelo 0.08..0.20 m
+CHK AVISO pes entrada no apartamento (frames 493-497): frames com deslize lento no chao: 2 [(495, 'R', 0.04), (497, 'R', 0.06)]; passo mais rapido 1.07 m/frame; altura do tornozelo 0.08..0.18 m
+CHK AVISO pes caminhada ate o sofa (frames 510-521): frames com deslize lento no chao: 1 [(514, 'R', 0.02)]; passo mais rapido 0.96 m/frame; altura do tornozelo 0.08..0.20 m
+CHK AVISO pes sentar no sofa (frames 524-531): frames com deslize lento no chao: 1 [(528, 'L', 0.02)]; passo mais rapido 0.28 m/frame; altura do tornozelo 0.08..0.16 m
+CHK OK porta distancia mao esquerda-macaneta (m) abrindo/fechando: [(493, 0.0), (494, 0.0), (495, 0.0), (500, 0.0), (502, 0.0), (504, 0.0), (505, 0.0)]
+CHK OK porta porta fechada(492)=0 aberta(498)=-82 fechada(506)=0 graus
+CHK OK props chave (solta da mao): salto entre frames 509->510 = 0.24 m
+CHK OK props controle (pego): salto entre frames 534->535 = 0.12 m
+CHK OK props controle (solto): salto entre frames 626->627 = 0.12 m
+CHK OK props chave pousa na mesa lateral (517): [-15.15, 5.4, 7.01]
+CHK OK props controle junto da mao direita no frame 535: 0.08 m
