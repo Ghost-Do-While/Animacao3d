@@ -1,3 +1,7 @@
 ﻿*.blend1
 __pycache__/
 *.log
+
+render/cena02_frames/
+render/telejornal_antigo/
+render/**/render_log.txt

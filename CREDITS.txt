@@ -1,0 +1,15 @@
+CREDITOS - Animacao3d "A Fila, a Vaga e o Cansaco"
+
+Personagens 3D (Blender Studio, https://studio.blender.org/characters/)
+  - Vincent   (usado como Miguel)    https://studio.blender.org/characters/vincent/v2/
+  - Rex       (usado como Claudio)   https://studio.blender.org/characters/rex/v1/
+  - Victoria  (apresentadora do telejornal)  https://studio.blender.org/characters/victoria/v1/
+  - Snow      (usado como Marcos)    https://studio.blender.org/characters/snow/v4/
+
+Licenca: Creative Commons Attribution (CC-BY), conforme a pagina de cada personagem no Blender Studio.
+Credito sugerido: "<Nome> Rig (CC) Blender Foundation | studio.blender.org"
+Confira a licenca exata de cada personagem nas paginas acima antes de publicar o video.
+
+Observacao: as texturas do Snow estao reduzidas para 1024 px na pasta snow_tex/ (derivadas das originais do Blender Studio).
+
+Software: Blender 5.2 (https://www.blender.org). Rigs: CloudRig (Rex/Victoria/Snow), BlenRig (Vincent), Rigify (personagens antigos).
