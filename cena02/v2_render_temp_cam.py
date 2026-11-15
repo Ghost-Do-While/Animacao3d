@@ -5,7 +5,7 @@ out, pct, fr = a[0], int(a[1]), int(a[2]); c = [float(x) for x in a[3:6]]; t = [
 sc = bpy.context.scene; sc.render.resolution_percentage = pct; sc.eevee.taa_render_samples = 16
 # coordenadas RELATIVAS ao volante do carro do Marcos naquele frame
 sc.frame_set(fr); bpy.context.view_layer.update()
-wp = bpy.data.objects["VEH_CarroMarcos_Volante"].matrix_world.translation
+wp = bpy.data.objects["VEH_CarroMarcos_Volante"].matrix_world.translation if os.environ.get("ABS") != "1" else type("Z", (), {"x": 0.0, "y": 0.0, "z": 0.0})()   # ABS=1: coordenadas absolutas
 c = [wp.x + c[0], wp.y + c[1], wp.z + c[2]]; t = [wp.x + t[0], wp.y + t[1], wp.z + t[2]]
 cam = bpy.data.objects.new("TMPCAM", bpy.data.cameras.new("TMPCAM")); sc.collection.objects.link(cam)
 cam.location = c; cam.data.lens = lens
