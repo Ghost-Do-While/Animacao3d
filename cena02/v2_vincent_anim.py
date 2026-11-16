@@ -33,6 +33,9 @@ def W(side, out, fwd, up):
 def aim(name, wdir, twist=0.0):
     """aponta o eixo Y do osso para wdir (mundo). twist = graus em torno do proprio eixo."""
     b = pb[name]
+    if b.rotation_mode == 'QUATERNION': b.rotation_quaternion = (1, 0, 0, 0)
+    else: b.rotation_euler = (0, 0, 0)
+    upd()      # ABSOLUTO: o twist da cabeca e o rolamento das maos nao se acumulam entre chaves
     M = b.matrix.copy()
     tgt = (R3i @ wdir).normalized()
     cur = M.to_3x3().col[1].normalized()

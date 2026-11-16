@@ -34,6 +34,7 @@ def W(side, out, fwd, up):
 
 def aim(name, wdir, twist=0.0):
     b = pb[name]
+    b.rotation_euler = (0, 0, 0); upd()      # ABSOLUTO: sem isso o twist da cabeca se acumulava de chave em chave (cabeca girando 399-492)
     M = b.matrix.copy()
     tgt = (R3i @ wdir).normalized()
     cur = M.to_3x3().col[1].normalized()

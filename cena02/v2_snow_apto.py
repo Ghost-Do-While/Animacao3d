@@ -35,9 +35,12 @@ Y0 = -6.283185307
 ROOT = [  # frame, (x, y, z), yaw  (yaw continuo: vira para a porta e depois desvira para a mesa/sofa)
     (493, (-13.15, 6.30, FL), 0.0), (495, (-13.20, 5.80, FL), 0.0), (497, (-13.10, 5.20, FL), 0.0),
     (499, (-13.05, 5.15, FL), -1.571), (500, (-13.00, 5.10, FL), -1.571), (505, (-12.90, 5.55, FL), -3.14159),
-    (507, (-13.20, 5.00, FL), -4.712), (510, (-13.45, 4.60, FL), Y0), (514, (-13.50, 4.00, FL), Y0 - 1.2),
-    (518, (-13.60, 3.30, FL), Y0 - 2.034), (521, (-13.30, 2.40, FL), Y0 - 1.571), (524, (-12.85, 2.30, 6.18), Y0 - 1.571),
-    (527, (-12.10, 2.20, 5.87), Y0 - 1.571), (531, (-12.05, 2.20, 5.92), Y0 - 1.571), (536, (-12.05, 2.20, 5.91), Y0 - 1.571)]
+    # CORRECAO: antes girava para +X (de costas para a mesa: jogava a chave "de costa") e andava de lado ate o sofa.
+    # Agora: +Y (porta) -> -X (de frente para a mesa, 507-510) -> -Y (direcao da caminhada) e so no fim vira para a TV.
+    (507, (-13.20, 5.00, FL), -1.571), (510, (-13.45, 4.60, FL), -1.571), (513, (-13.48, 4.20, FL), -0.2),
+    (516, (-13.55, 3.60, FL), 0.0), (519, (-13.45, 2.90, FL), -0.35), (521, (-13.30, 2.40, FL), -1.0),
+    (524, (-12.85, 2.30, 6.18), -1.571),
+    (527, (-12.10, 2.20, 5.87), -1.571), (531, (-12.05, 2.20, 5.92), -1.571), (536, (-12.05, 2.20, 5.91), -1.571)]
 for f, loc, yaw in ROOT:
     rm.location = Vector(loc); rm.rotation_euler = (0, 0, yaw)
     rm.keyframe_insert("location", frame=f); rm.keyframe_insert("rotation_euler", frame=f)
@@ -92,8 +95,8 @@ hand(498, 0.0, 0.45); hand(499, 0.7, 0.45); hand(505, 0.7, 0.45); hand(506, 0.0,
 # ---- 506-510: solta a porta, vira, chave: mao direita vai para tras e SOLTA (510) em direcao a mesa
 walk(506, 510, FL, step=0.3, swing_arms=False)
 frame(506); hang("L", 506); wrist("R", 506, body_pt(0.20, 0.22, 0.95), axes()[1])
-frame(508); hang("L", 508); wrist("R", 508, body_pt(-0.10, 0.50, 1.15), (-axes()[2]))
-frame(510); hang("L", 510); wrist("R", 510, body_pt(-0.25, 0.60, 1.18), (-axes()[2]))
+frame(508); hang("L", 508); wrist("R", 508, body_pt(0.05, 0.38, 0.88), axes()[1])      # prepara o arremesso (braco recuado e baixo)
+frame(510); hang("L", 510); wrist("R", 510, body_pt(0.50, 0.32, 1.12), axes()[1])      # solta a chave com o braco para a FRENTE, em direcao a mesa
 for f in (506, 508, 510):
     frame(f); torso(f, lean=4, hpitch=0, htwist=look_at(f, TABLE, 0.6))
 frame(510); P_rel = (rig.matrix_world @ pb["DEF-Wrist.R"].head).copy()     # onde a mao esta ao soltar
@@ -180,10 +183,11 @@ wrist("L", 627, body_pt(0.30, -0.18, 0.62), axes()[1] * 0.6 - UP * 0.4); torso(6
 hand(538, 0.0, 0.8); hand(541, 0.0, 0.8); hand(553, 0.0, 0.8); hand(600, 0.0, 0.8); hand(610, 0.0, 0.8); hand(626, 0.0, 0.8); hand(628, 0.0, 0.0)
 
 # ---- 628-720: fecha os olhos, suspira e dorme (cabeca cai para frente e para o lado)
-for f, ls, hp, tw in ((640, -16, 12, 0), (668, -18, 6, 0), (684, -15, 14, 0), (702, -12, 28, 12), (720, -12, 30, 14)):
+TV_EYE = Vector((TV.x, TV.y, 7.15))      # olhar coerente: antes o alvo ficava 0,9 m abaixo da cabeca (olhos revirando/brancos)
+for f, ls, hp, tw in ((628, -14, 12, 0), (640, -16, 12, 0), (668, -18, 6, 0), (684, -15, 14, 0), (702, -12, 28, 12), (720, -12, 30, 14)):
     frame(f)
     wrist("R", f, body_pt(0.12, 0.42, 0.62), axes()[1]); wrist("L", f, body_pt(0.30, -0.18, 0.62), axes()[1] * 0.6 - UP * 0.4)
-    torso(f, lean=ls, hpitch=hp, htwist=tw)
+    torso(f, lean=ls, hpitch=hp, htwist=tw + look_at(f, TV_EYE, 0.4 if f < 700 else 0.0))
 
 # ---- pes no fim e rosto
 frame(720)
