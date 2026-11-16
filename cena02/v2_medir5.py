@@ -1,18 +1,20 @@
 import bpy, math
-from mathutils import Quaternion
-sc = bpy.context.scene; r = bpy.data.objects["RIG-Vincent"]
+sc = bpy.context.scene; r = bpy.data.objects["RIG-Vincent"]; pb = r.pose.bones
 for o in bpy.data.objects:
     if o.type == 'MESH' and o.name.startswith("GEO-"): o.hide_viewport = True
 sc.frame_set(382); bpy.context.view_layer.update()
-pb = r.pose.bones
-def d(): return round(((r.matrix_world @ pb["fing_ind_4_L"].tail) - (r.matrix_world @ pb["hand_fk_L"].head)).length, 3)
-print("HCT modos", [(n, pb[n].rotation_mode) for n in ("fing_ind_2_L", "fing_ind_3_L", "fing_ind_4_L", "fing_ind_ctrl_L")])
-for n in ("fing_ind_ctrl_L", "fing_ind_2_L"):
-    b = pb[n]
-    for ax in ((1, 0, 0), (0, 0, 1)):
-        for ang in (-0.9, 0.9):
-            b.rotation_quaternion = Quaternion(ax, ang) if b.rotation_mode == 'QUATERNION' else b.rotation_quaternion
-            if b.rotation_mode != 'QUATERNION': b.rotation_euler = tuple(a * ang for a in ax)
-            bpy.context.view_layer.update(); print("HCT", n, ax, ang, d())
-    b.rotation_quaternion = (1, 0, 0, 0); b.rotation_euler = (0, 0, 0)
-print("HCT base", d())
+W = r.matrix_world
+def tip(fg): return W @ pb[f"fing_{fg}_4_L"].tail
+def d(fg): return round((tip(fg) - W @ pb["hand_fk_L"].head).length, 3)
+names = [b.name for b in pb if b.name.endswith("_L") and ("thumb" in b.name.lower() or "pulg" in b.name.lower()) and "bbone" not in b.name][:12]
+print("POL", names)
+print("BASE", {fg: d(fg) for fg in ("ind", "mid", "ring", "lit")})
+for ang in (0.5, 1.0):
+    for fg in ("ind", "mid", "ring", "lit"):
+        for j in (2, 3, 4): pb[f"fing_{fg}_{j}_L"].rotation_euler = (0, 0, 0)
+        for j in (2, 3, 4): pb[f"fing_{fg}_{j}_L"].rotation_euler[0] = ang
+    bpy.context.view_layer.update(); print("CURL", ang, {fg: d(fg) for fg in ("ind", "mid", "ring", "lit")})
+    for fg in ("ind", "mid", "ring", "lit"):
+        for j in (2, 3, 4): pb[f"fing_{fg}_{j}_L"].rotation_euler = (0, 0, 0)
+for fg in ("ind", "mid", "ring", "lit"):
+    print("MODE", fg, [pb[f"fing_{fg}_{j}_L"].rotation_mode for j in (2, 3, 4)], [pb[f"fing_{fg}_{j}_L"].lock_rotation[:] for j in (2,)])

@@ -60,3 +60,19 @@ Creditos dos modelos em `CREDITS.txt`.
 
 Diagnostico: `v2_medir*.py` (medicoes), `v2_teste_olhos.py`. Rodar na ordem: `v2_fix_pernas_carro`, `v2_rex_anim`, `v2_vincent_anim`, `v2_snow_apto`, `v2_fix_olhos_cornea` (todos com `-S Scene`).
 Obs.: de 522 a 528 o Snow ainda recua ~1,2 m em 6 frames para sentar (rapido); ajuste futuro.
+
+## Segunda rodada de correcoes (16/11/2026)
+| Frame | Problema | Correcao |
+|---|---|---|
+| 91+ | olhos do Snow brancos / sem acompanhar a cabeca | `v2_fix_olhos_cornea.py`: cornea (Refraction) escondida em TODO o filme (viewport e render); iris e pupila aparecem |
+| todo o filme | emocoes do Snow incoerentes | `v2_snow_emocoes.py`: linha do tempo de 58 emocoes (cansaco, impaciencia/raiva no carro, suspiro, surpresa na briga, exaustao, irritacao ao jogar a chave, alivio, surpresa/indignacao com o jornal, tristeza, sono) + piscadas. Rodar DEPOIS de `v2_snow_exit` e `v2_snow_apto` |
+| 168 | carro "mole" | `v2_fix_carro_fisica.py`: suspensao recalculada nos 5 carros (cabeceio max 1,3 graus, amortecimento critico, 1 chave por frame) |
+| 338 | mao do Vincent | revisada; poses de mao ja aplicadas (punho / indicador / garra); sem mudanca adicional |
+| 518 | corpo esticado | `v2_snow_apto.py`: raiz 5-6 cm mais baixa (joelhos flexionados), cotovelos dobrados, tronco menos rigido |
+| 542 | ancora em pe, sem animacao de jornalista | `v2_victoria_anim.py`: Victoria SENTADA (escala 1,25, assento `TJ_Cadeira_Assento`, pes em IK), fala com a mandibula, acena a cabeca, mao direita enfatiza manchetes e aponta as imagens |
+| 568 | graficos do jornal entravam nos objetos | `v2_telejornal_overlays.py`: graficos numa cena propria (`SCN_Telejornal_Ovl`, camera fixa sem desfoque, fundo transparente) compostos POR CIMA com `telejornal_compor.py` |
+
+**Pendente (render):** a TV do apartamento ainda usa os 103 PNG antigos (Victoria em pe, graficos 3D). Para atualizar:
+1. `python cena02/render_telejornal.py` (estudio, ~2,4 min/frame, ~4 h) -> `render/telejornal_victoria/`
+2. `blender -b cena02_v2.blend -S SCN_Telejornal_Ovl -s 1 -e 103 -a` (graficos, rapido) -> `render/telejornal_ovl/`
+3. `python cena02/telejornal_compor.py` -> `render/telejornal_final/`; copiar para `render/telejornal/`.

@@ -37,8 +37,8 @@ ROOT = [  # frame, (x, y, z), yaw  (yaw continuo: vira para a porta e depois des
     (499, (-13.05, 5.15, FL), -1.571), (500, (-13.00, 5.10, FL), -1.571), (505, (-12.90, 5.55, FL), -3.14159),
     # CORRECAO: antes girava para +X (de costas para a mesa: jogava a chave "de costa") e andava de lado ate o sofa.
     # Agora: +Y (porta) -> -X (de frente para a mesa, 507-510) -> -Y (direcao da caminhada) e so no fim vira para a TV.
-    (507, (-13.20, 5.00, FL), -1.571), (510, (-13.45, 4.60, FL), -1.571), (513, (-13.48, 4.20, FL), -0.2),
-    (516, (-13.55, 3.60, FL), 0.0), (519, (-13.45, 2.90, FL), -0.35), (521, (-13.30, 2.40, FL), -1.0),
+    (507, (-13.20, 5.00, FL), -1.571), (510, (-13.45, 4.60, FL), -1.571), (513, (-13.48, 4.20, FL - 0.05), -0.2),
+    (516, (-13.55, 3.60, FL - 0.06), 0.0), (519, (-13.45, 2.90, FL - 0.06), -0.35), (521, (-13.30, 2.40, FL - 0.04), -1.0),   # raiz 5-6 cm mais baixa: joelhos flexionados (antes o corpo andava esticado)
     (524, (-12.85, 2.30, 6.18), -1.571),
     (527, (-12.10, 2.20, 5.87), -1.571), (531, (-12.05, 2.20, 5.92), -1.571), (536, (-12.05, 2.20, 5.91), -1.571)]
 for f, loc, yaw in ROOT:
@@ -124,7 +124,7 @@ kloc(517, (-15.15, 5.4, 7.005), (math.radians(270), math.radians(10), math.radia
 # ---- 510-524: anda ate o sofa
 walk(510, 521, FL, step=0.5, swing_arms=False)
 for f in (512, 514, 516, 518, 520):
-    frame(f); hang("L", f); hang("R", f); torso(f, lean=8, hpitch=6, htwist=look_at(f, TV, 0.4))
+    frame(f); hang("L", f, 0.14, 0.80); hang("R", f, 0.14, 0.80); torso(f, lean=5, hpitch=4, htwist=look_at(f, TV, 0.4))     # cotovelos levemente dobrados, tronco menos rigido
 hand(514, 0.0, 0.0)
 walk(521, 524, FL, step=0.25, swing_arms=False)
 frame(524); hang("L", 524); hang("R", 524); torso(524, lean=10, hpitch=4, htwist=look_at(524, TV, 0.4))
