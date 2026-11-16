@@ -57,11 +57,21 @@ def key(name, f, loc=False):
     if loc: b.keyframe_insert("location", frame=f)
 
 # --------------------------------------------------------------- poses (out, fwd, up) por braco
-REST = dict(u=(0.12, 0.0, -1.0), f=(0.10, 0.15, -1.0))
-ANG  = dict(u=(0.45, 0.10, -0.88), f=(0.22, 0.75, -0.55))     # punhos fechados na frente, tenso
-AT   = dict(u=(0.25, 0.90, -0.30), f=(0.15, 0.97, -0.20))      # aponta para o Claudio
-FLR  = dict(u=(0.30, 0.60, -0.75), f=(0.22, 0.55, -0.80))      # aponta para o chao (vaga V3)
-HEAD = dict(u=(0.80, -0.05, 0.35), f=(-0.55, 0.10, 0.85))      # maos na cabeca ("Pelo amor de Deus!")
+# h = (curvatura do indicador, curvatura dos outros 3 dedos) em radianos por articulacao (0 = esticado, 1 = punho fechado)
+REST = dict(u=(0.12, 0.0, -1.0), f=(0.10, 0.15, -1.0), h=(0.35, 0.45))                      # mao relaxada, dedos levemente curvos
+ANG  = dict(u=(0.45, 0.10, -0.88), f=(0.22, 0.75, -0.55), h=(0.95, 1.0))     # punhos fechados na frente, tenso
+AT   = dict(u=(0.25, 0.90, -0.30), f=(0.15, 0.97, -0.20), h=(0.0, 1.0))      # aponta para o Claudio (so o indicador estica)
+FLR  = dict(u=(0.30, 0.60, -0.75), f=(0.22, 0.55, -0.80), h=(0.0, 1.0))      # aponta para o chao (vaga V3)
+HEAD = dict(u=(0.80, -0.05, 0.35), f=(-0.55, 0.10, 0.85), h=(0.55, 0.60))      # maos na cabeca ("Pelo amor de Deus!"): dedos em garra
+
+JOINT = (0.95, 1.05, 0.80)       # fracao da curvatura em cada falange (fing_<dedo>_2/3/4)
+def fingers(nm, h, f):
+    """curva as falanges (rotacao X local) e chaveia. Antes os dedos ficavam sempre esticados e abertos (pose de descanso do BlenRig)."""
+    for fg, c in (("ind", h[0]), ("mid", h[1]), ("ring", h[1] * 1.05), ("lit", h[1] * 1.1)):
+        for j, k in zip((2, 3, 4), JOINT):
+            b = pb[f"fing_{fg}_{j}_{nm}"]
+            b.rotation_euler = (c * k, 0, 0)
+            b.keyframe_insert("rotation_euler", frame=f)
 
 def pose(f, L, Rr, spine=(0, 0), head=(0, 0, 0), gaze=True):
     """spine=(inclinacao p/ frente, lado) graus; head=(pitch, lado, giro) graus."""
@@ -76,6 +86,7 @@ def pose(f, L, Rr, spine=(0, 0), head=(0, 0, 0), gaze=True):
         aim(f"arm_fk_{nm}", u);      key(f"arm_fk_{nm}", f)
         aim(f"forearm_fk_{nm}", fo); key(f"forearm_fk_{nm}", f)
         aim(f"hand_fk_{nm}", fo);    key(f"hand_fk_{nm}", f)
+        fingers(nm, P["h"], f)
     if gaze:
         b = pb["look_head"]
         M = b.matrix.copy(); M.translation = rig.matrix_world.inverted() @ CLAUDIO_HEAD

@@ -56,7 +56,7 @@ Creditos dos modelos em `CREDITS.txt`.
 | 499-521 | Snow andava de lado ate o sofa | yaw da raiz errado (virava para a TV antes de andar) | novas chaves de yaw em `v2_snow_apto.py`: anda de frente (produto frente.velocidade ~1) e so vira para a TV no fim |
 | 508 | jogava a chave de costas | yaw 507 = +X (de costas para a mesa) | agora de frente para a mesa (-X) e braco para a frente |
 | 610-720 | olhos brancos | cornea (Refraction no Eevee) renderiza como mancha branca; alvo do olhar tambem ficava abaixo | `v2_fix_olhos_cornea.py` esconde a cornea no render de 493 a 720; alvo do olhar em `TV_EYE` (628-720) |
-| 299, 382 | mao do Vincent aberta/para fora | rolamento acumulado (corrigido pelo `aim()` absoluto) + dedos de descanso do BlenRig | rolamento corrigido; DEDOS AINDA ABERTOS (curvar `fing_*_ctrl_*` nao teve efeito visivel; precisa de poses de mao) |
+| 299, 382 | mao do Vincent aberta/para fora | rolamento acumulado (corrigido pelo `aim()` absoluto) + dedos de descanso do BlenRig | rolamento corrigido + POSES DE MAO do Vincent (`v2_vincent_anim.py`, funcao `fingers()`): punho fechado, indicador esticado ao apontar, garra na cabeca, mao relaxada; curva as falanges `fing_<dedo>_2/3/4` (rotacao X), chaveadas em cada pose |
 
 Diagnostico: `v2_medir*.py` (medicoes), `v2_teste_olhos.py`. Rodar na ordem: `v2_fix_pernas_carro`, `v2_rex_anim`, `v2_vincent_anim`, `v2_snow_apto`, `v2_fix_olhos_cornea` (todos com `-S Scene`).
 Obs.: de 522 a 528 o Snow ainda recua ~1,2 m em 6 frames para sentar (rapido); ajuste futuro.
