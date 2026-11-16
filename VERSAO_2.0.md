@@ -76,3 +76,9 @@ Obs.: de 522 a 528 o Snow ainda recua ~1,2 m em 6 frames para sentar (rapido); a
 1. `python cena02/render_telejornal.py` (estudio, ~2,4 min/frame, ~4 h) -> `render/telejornal_victoria/`
 2. `blender -b cena02_v2.blend -S SCN_Telejornal_Ovl -s 1 -e 103 -a` (graficos, rapido) -> `render/telejornal_ovl/`
 3. `python cena02/telejornal_compor.py` -> `render/telejornal_final/`; copiar para `render/telejornal/`.
+
+## Estado do render do telejornal (parado em 16/11/2026, 16:50)
+- Estudio (Victoria sentada): **65 de 103 frames** prontos em `render/telejornal_victoria/` (tv_0001 a tv_0065), ~1,8 min/frame; faltam 66-103.
+- Para continuar: `bash cena02/render_telejornal_tudo.sh` (o `render_telejornal.py` retoma de onde parou, depois renderiza os graficos, compoe e copia para `render/telejornal/`).
+- Enquanto os 103 frames compostos nao forem copiados, a TV do apartamento (`render/telejornal/`) ainda mostra os frames ANTIGOS (Victoria em pe, graficos 3D).
+- Os graficos (`SCN_Telejornal_Ovl`) ainda nao foram renderizados: `blender -b cena02_v2.blend -S SCN_Telejornal_Ovl -s 1 -e 103 -a`.
