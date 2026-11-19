@@ -82,3 +82,9 @@ Obs.: de 522 a 528 o Snow ainda recua ~1,2 m em 6 frames para sentar (rapido); a
 - Para continuar: `bash cena02/render_telejornal_tudo.sh` (o `render_telejornal.py` retoma de onde parou, depois renderiza os graficos, compoe e copia para `render/telejornal/`).
 - Enquanto os 103 frames compostos nao forem copiados, a TV do apartamento (`render/telejornal/`) ainda mostra os frames ANTIGOS (Victoria em pe, graficos 3D).
 - Os graficos (`SCN_Telejornal_Ovl`) ainda nao foram renderizados: `blender -b cena02_v2.blend -S SCN_Telejornal_Ovl -s 1 -e 103 -a`.
+
+## Atualizacao 19/11/2026 (11:20): render do telejornal CONCLUIDO
+- Estudio 103/103, graficos 103/103, composicao 103/103; os 103 frames finais ja estao em `render/telejornal/` (a TV do apartamento passa a usar os frames novos).
+- A composicao com `telejornal_compor.py` exige Pillow; sem ele use `blender -b --python cena02/telejornal_compor_blender.py` (roda da raiz do projeto).
+- `cena02/vigia_travadas.ps1` mata o Blender travado (6 min sem frame novo) e o `render_telejornal.py` refaz o lote sozinho.
+- Proximo: render da cena principal (`cena02_v2.blend`, `-S Scene`), Etapa 4 (benchmark do chunk loader) e Etapa 5 (cameras 9:16).
